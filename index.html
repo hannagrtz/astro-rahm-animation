@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Astro & rahm Animation</title>
+  <style>
+    body {
+      margin: 0;
+      background: #f0f8ff;
+      overflow: hidden;
+      font-family: sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    #scene {
+      position: relative;
+      width: 400px;
+      height: 500px;
+    }
+    #astro {
+      position: absolute;
+      bottom: 0;
+      width: 150px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+    }
+    #logo {
+      position: absolute;
+      width: 120px;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 130px;
+      opacity: 0;
+    }
+    .firework {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: red;
+      animation: explode 1s ease-out forwards;
+    }
+    @keyframes throwLogo {
+      0% { bottom: 130px; opacity: 0; }
+      20% { opacity: 1; }
+      50% { bottom: 300px; }
+      100% { bottom: 130px; opacity: 0; }
+    }
+    @keyframes explode {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(2); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div id="scene">
+    <img id="astro" src="astro.png" alt="Astro" />
+    <img id="logo" src="rahm.png" alt="rahm logo" />
+  </div>
+
+  <script>
+    const logo = document.getElementById("logo");
+    const scene = document.getElementById("scene");
+
+    function throwAndExplode() {
+      logo.style.animation = "throwLogo 2s ease-in-out";
+      setTimeout(() => {
+        for (let i = 0; i < 10; i++) {
+          const particle = document.createElement("div");
+          particle.classList.add("firework");
+          particle.style.background = `hsl(${Math.random() * 360}, 100%, 60%)`;
+          particle.style.left = `${200 + Math.random() * 100 - 50}px`;
+          particle.style.bottom = `280px`;
+          scene.appendChild(particle);
+          setTimeout(() => particle.remove(), 1000);
+        }
+      }, 1000);
+      setTimeout(() => {
+        logo.style.animation = "none";
+      }, 2100);
+    }
+
+    scene.addEventListener("click", throwAndExplode);
+  </script>
+</body>
+</html>
